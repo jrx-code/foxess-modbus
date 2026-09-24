@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "foxess-modbus"
+version = "0.1.0"
+description = "Read and control FoxESS hybrid inverters over Modbus, as typed Python objects."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Jarek Iwanus" }]
+keywords = ["modbus", "foxess", "inverter", "solar", "battery", "home-assistant"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Home Automation",
+    "Typing :: Typed",
+]
+# The caller injects a ModbusUnit; tmodbus is the backend this is exercised against.
+# 4.12 brings Device, UpdateReport and read_optional.
+dependencies = ["modbus-connection[tmodbus]>=4.12.1"]
+
+[project.urls]
+Homepage = "https://github.com/jrx-code/foxess-modbus"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.11",
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/foxess_modbus"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "D"]
+# D401 wants imperative docstrings; this codebase names things ("The inverter
+# model a model string implies"), matching modbus-connection's own style.
+ignore = ["D107", "D401"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# A test's name is its documentation; docstrings are for the ones that need a why.
+"tests/*" = ["D100", "D103", "D104"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src", "tests"]
+strict = true
