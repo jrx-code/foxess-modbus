@@ -38,3 +38,20 @@ jobs:
         run: uv sync
       - name: Run tests
         run: uv run pytest
+
+  # uv.lock tracks the version Home Assistant pins. This job checks the other end
+  # of `modbus-connection[tmodbus]>=4.12.1` in pyproject.toml: the oldest supported
+  # release. Raise the version here together with the lower bound.
+  test-minimum:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: uv sync
+      - name: Install the lowest supported modbus-connection
+        run: uv pip install "modbus-connection[tmodbus]==4.12.1"
+      - name: Run tests
+        run: uv run --no-sync pytest

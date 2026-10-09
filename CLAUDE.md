@@ -19,8 +19,8 @@ modbus-connection's docs).
 - Test against the mock (`mock_modbus_unit` fixture), assert block reads with
   `read_events` whenever a change touches the read plan.
 - Writes: single FC06 only (manager fw >= 1.93 refuses FC16 on 41xxx/44xxx).
-- `modbus-connection>=4.12.1` (needs `Device`). HA 2026.9.x pins 4.10.0, HA dev /
-  2026.10 pins 4.12.1.
+- `modbus-connection>=4.12.1` (needs `Device`). HA 2026.9.x pins 4.10.0, HA 2026.10.0
+  pins 4.12.3. `uv.lock` follows the HA pin; CI job `test-minimum` tests 4.12.1.
 
 ## Dev
 
